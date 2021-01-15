@@ -76,6 +76,9 @@
 				default: false
 			}
 		},
+		created() {
+			console.log(this.weeks)
+		},
 		methods: {
 			choiceDate(weeks) {
 				this.$emit('change', weeks)
@@ -150,6 +153,7 @@
 
 	.uni-calendar-item--checked {
 		background-color: $uni-color-primary;
+		border-radius: 50%;
 		color: #fff;
 		opacity: 0.8;
 	}

@@ -26,7 +26,6 @@
               :style="[
 				{background: item.data.rent_bg}
               ]"
-              :class="[{ selected: isClick(item.day) }]"
               >{{ item.day | dayFilter }}
               <view v-show="item.data.type == 2" class="circle up_circle"></view>
               <view v-show="item.data.type == 3" class="circle down_circle"></view>
@@ -262,6 +261,8 @@ export default {
 .content {
   width: 750rpx;
   margin: 0 auto;
+  padding: 0 20rpx;
+  box-sizing: border-box;
 }
 .flex {
   width: 100%;

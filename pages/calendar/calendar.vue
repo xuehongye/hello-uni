@@ -101,9 +101,6 @@ export default {
         month: month,
       };
       // 此处获取动态的数据，赋值给extraData
-      this.extraData = [
-        { date: "2020-11-3", value: "签到", dot: true, active: true },
-      ];
     },
   },
 };

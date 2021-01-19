@@ -91,7 +91,7 @@ export default {
         return
       }
       let index = this.rent_list.findIndex(item => item.type == this.type)
-      let date = e.year + "-" + e.month + 1 + "-" + e.day
+      let date = e.year + "-" + (parseInt(e.month) + 1) + "-" + e.day
       this.extraData.push({date, type: this.type, rent_bg: this.rent_list[index].rent_bg})
     },
     monthTap(val) {

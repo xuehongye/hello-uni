@@ -15,47 +15,64 @@
           <text class="week">{{ item }}</text>
         </view>
       </view>
-      <view class="month-tit">{{ time.month + 1 }}月</view>
-      <view class="flex-wrap">
-        <template v-for="item in visibleDays" :Key="item.day">
-          <view class="day-box flex-column">
-            <view
-              v-if="isCurrentMonth(item.day)"
-              class="day"
-              @click="clickDate(item.day)"
-              :style="[
-				{background: item.data.rent_bg}
-              ]"
-              >{{ item.day | dayFilter }}
-              <view v-show="item.data.type == 2" class="circle up_circle"></view>
-              <view v-show="item.data.type == 3" class="circle down_circle"></view>
-            </view>
-            <template v-if="showText">
-              <text
-                v-if="isCurrentMonth(item.day)"
-                class="day-text"
-                :style="{ color: textColor }"
-              >
-                {{ item.data.value || "" }}
-              </text>
-            </template>
-            <template v-if="showDot">
-              <text
-                v-if="
-                  isCurrentMonth(item.day) && item.data.dot && item.data.active
-                "
-                class="day-dot"
-              ></text>
-              <text
-                v-if="
-                  isCurrentMonth(item.day) && item.data.dot && !item.data.active
-                "
-                class="day-dot dot-gray"
-              ></text>
+      <swiper
+        class="swiper"
+        style="height: 750rpx"
+        @touchstart="start"
+        @touchend="end"
+      >
+        <swiper-item>
+          <view class="month-tit">{{ time.month + 1 }}月</view>
+          <view class="flex-wrap">
+            <template v-for="item in visibleDays" :Key="item.day">
+              <view class="day-box flex-column">
+                <view
+                  v-if="isCurrentMonth(item.day)"
+                  class="day"
+                  @click="clickDate(item.day)"
+                  :style="[{ background: item.data.rent_bg }]"
+                  >{{ item.day | dayFilter }}
+                  <view
+                    v-show="item.data.type == 2"
+                    class="circle up_circle"
+                  ></view>
+                  <view
+                    v-show="item.data.type == 3"
+                    class="circle down_circle"
+                  ></view>
+                </view>
+                <template v-if="showText">
+                  <text
+                    v-if="isCurrentMonth(item.day)"
+                    class="day-text"
+                    :style="{ color: textColor }"
+                  >
+                    {{ item.data.value || "" }}
+                  </text>
+                </template>
+                <template v-if="showDot">
+                  <text
+                    v-if="
+                      isCurrentMonth(item.day) &&
+                      item.data.dot &&
+                      item.data.active
+                    "
+                    class="day-dot"
+                  ></text>
+                  <text
+                    v-if="
+                      isCurrentMonth(item.day) &&
+                      item.data.dot &&
+                      !item.data.active
+                    "
+                    class="day-dot dot-gray"
+                  ></text>
+                </template>
+              </view>
             </template>
           </view>
-        </template>
-      </view>
+        </swiper-item>
+      </swiper>
     </view>
   </view>
 </template>
@@ -93,6 +110,7 @@ export default {
         background: this.selColor,
         color: "#ffffff",
       },
+      startData: { clientX: "" },
     };
   },
   props: {
@@ -220,6 +238,24 @@ export default {
       this.click_time = { year, month, day };
       this.$emit("calendarTap", { year, month, day });
     },
+    start(e) {
+      this.startData.clientX = e.changedTouches[0].clientX;
+    },
+    end(e) {
+      const subX = e.changedTouches[0].clientX - this.startData.clientX;
+      if (subX > 100) {
+        let { year, month } = getYearMonthDay(new Date())
+        let { year: y, month: m } = this.time
+        console.log("右滑");
+        if(year === y && month === m) {
+          return
+        }
+        this.prevMonth()
+      } else if (subX < -100) {
+        console.log("左滑");
+        this.nextMonth()
+      }
+    },
     prevMonth() {
       // 上一月
       let {
@@ -244,6 +280,7 @@ export default {
       this.$emit("monthTap", getYearMonthDay(d));
     },
     monthChange(e) {
+      console.log(e);
       let { value } = e.detail;
       let timeArr = value.split("-");
       this.time = { year: timeArr[0], month: timeArr[1] - 1, day: 1 };

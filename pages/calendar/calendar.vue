@@ -1,5 +1,6 @@
 <template>
   <view class="content">
+    <view class="car_date">车辆排期</view>
     <v-calendar
       name="calendar"
       :defaultTime="time"
@@ -140,5 +141,9 @@ export default {
       }
     }
   }
+}
+.car_date{
+  text-align: center;
+  margin-top: 40rpx;
 }
 </style>
